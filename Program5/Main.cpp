@@ -3,7 +3,7 @@
 #include <iostream>
 #include <cmath>
 #include "SceneComponent/SceneComponent.h"
-#include "Screen.h"
+#include "Image/Screen.h"
 
 
 int main() {
