@@ -2,21 +2,22 @@
 
 #include <iostream>
 #include <cmath>
-#include <vector>
+#include "SceneComponent/SceneComponent.h"
+#include "Screen.h"
 
-class MyClass {
-public:
-    int value = 7;
-};
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
-    std::cout << "Tangent of pi/4: " << tan(M_PI / 4) << std::endl;
+    Pixel pixel(65, 66, 67);
+    std::cout << pixel << std::endl << std::endl;
 
-    std::vector<int> test_vector;
+    Screen screen(4, 4);
+    screen.setPixel(0, 1, pixel);
 
-    MyClass object;
-    std::cout << object.value;
+    // Output
+    std::cout << "P3" << std::endl;  // ASCII file
+    std::cout << screen.getWidth() << " " << screen.getHeight() << std::endl;  // Number of columns and rows
+    std::cout << "255" << std::endl;  // Maximum color value
+    std::cout << screen << std::endl;  // Pixel values
 
     return 0;
 }

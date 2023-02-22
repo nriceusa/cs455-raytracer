@@ -7,9 +7,9 @@
 
 
 #include <vector>
-#include "Object.h"
+#include "SceneComponent.h"
 
-class Light: Object {
+class Light: SceneComponent {
 
 };
 
