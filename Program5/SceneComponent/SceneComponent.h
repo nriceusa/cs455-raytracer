@@ -16,27 +16,28 @@ private:
     std::vector<float> rotation;
     std::vector<float> scale;
 
-public:
+protected:
     SceneComponent() : location(3, 0), rotation(3, 0), scale(3, 0) {}
 
-    SceneComponent(float xLoc, float yLoc, float zLoc) : location(3), rotation(3, 0), scale(3, 0) {
+    SceneComponent(const float xLoc, const float yLoc, const float zLoc) : location(3), rotation(3, 0), scale(3, 0) {
         setLocation(xLoc, yLoc, zLoc);
     }
 
-    SceneComponent(float xLoc, float yLoc, float zLoc,
-                   float xRot, float yRot, float zRot) : location(3), rotation(3), scale(3, 0) {
+    SceneComponent(const float xLoc, const float yLoc, const float zLoc,
+                   const float xRot, const float yRot, const float zRot) : location(3), rotation(3), scale(3, 0) {
         setLocation(xLoc, yLoc, zLoc);
         setRotation(xRot, yRot, zRot);
     }
 
-    SceneComponent(float xLoc, float yLoc, float zLoc,
-                   float xRot, float yRot, float zRot,
-                   float xScale, float yScale, float zScale) : location(3), rotation(3), scale(3) {
+    SceneComponent(const float xLoc, const float yLoc, const float zLoc,
+                   const float xRot, const float yRot, const float zRot,
+                   const float xScale, const float yScale, const float zScale) : location(3), rotation(3), scale(3) {
         setLocation(xLoc, yLoc, zLoc);
         setRotation(xRot, yRot, zRot);
         setScale(xScale, yScale, zScale);
     }
 
+public:
     const std::vector<float> &getLocation() const {
         return location;
     }
@@ -73,19 +74,19 @@ public:
         return rotation.at(2);
     }
 
-    void setLocation(float x, float y, float z) {
+    void setLocation(const float x, const float y, const float z) {
         location.at(0) = x;
         location.at(1) = y;
         location.at(2) = z;
     }
 
-    void setRotation(float x, float y, float z) {
+    void setRotation(const float x, const float y, const float z) {
         rotation.at(0) = x;
         rotation.at(1) = y;
         rotation.at(2) = z;
     }
 
-    void setScale(float x, float y, float z) {
+    void setScale(const float x, const float y, const float z) {
         scale.at(0) = x;
         scale.at(1) = y;
         scale.at(2) = z;
