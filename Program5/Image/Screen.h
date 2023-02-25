@@ -48,6 +48,7 @@ public:
             for (Pixel pixel : column) {
                 os << pixel << "  ";
             }
+            os << std::endl;
         }
         return os;
     }
