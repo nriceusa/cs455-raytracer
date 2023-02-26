@@ -39,8 +39,10 @@ public:
         pixels.at(x).at(y) = pixel;
     }
 
-    void setPixel(const size_t x, const size_t y, const unsigned char r, const unsigned char g, const unsigned char b) {
-        pixels.at(x).at(y).setRGB(r, g, b);
+    void setPixelColor(const size_t x, const size_t y, const double r, const double g, const double b) {
+        pixels.at(x).at(y).setRGB(static_cast<unsigned char>(r * 255),
+                                        static_cast<unsigned char>(g * 255),
+                                        static_cast<unsigned char>(b * 255));
     }
 
     friend std::ostream &operator<<(std::ostream &os, const Screen &screen) {

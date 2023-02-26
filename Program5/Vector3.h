@@ -8,6 +8,7 @@
 
 #include <cmath>
 #include <iosfwd>
+#include <ostream>
 
 class Vector3 {
 private:
@@ -30,6 +31,18 @@ public:
         return z;
     }
 
+    void setX(double newX) {
+        Vector3::x = newX;
+    }
+
+    void setY(double newY) {
+        Vector3::y = newY;
+    }
+
+    void setZ(double newZ) {
+        Vector3::z = newZ;
+    }
+
     Vector3 operator-() const {
         return Vector3{-x, -y, -z};
     }
@@ -41,15 +54,15 @@ public:
         return *this;
     }
 
-    Vector3& operator*=(const Vector3& vector) {
-        x *= vector.getX();
-        y *= vector.getY();
-        z *= vector.getZ();
+    Vector3& operator*=(const double multiplier) {
+        x *= multiplier;
+        y *= multiplier;
+        z *= multiplier;
         return *this;
     }
 
-    Vector3& operator/=(const Vector3& vector) {
-        return *this *= 1/vector;
+    Vector3& operator/=(const double dividend) {
+        return *this *= 1/dividend;
     }
 
     double getLength() const {
@@ -96,6 +109,11 @@ public:
 
     friend Vector3 operator/(const Vector3& vector, const double dividend) {
         return 1/dividend * vector;
+    }
+
+    friend std::ostream &operator<<(std::ostream &os, const Vector3 &vector3) {
+        os << vector3.x << " " << vector3.y << " " << vector3.z;
+        return os;
     }
 
     static double dot(const Vector3& vectorLeft, const Vector3& vectorRight) {

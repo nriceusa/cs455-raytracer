@@ -8,7 +8,7 @@
 
 #include "Light.h"
 
-class LightDirectional: Light {
+class LightDirectional: public Light {
 
 };
 

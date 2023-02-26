@@ -31,6 +31,10 @@ public:
     void addSphere(const Sphere& sphere) {
         spheres.push_back(sphere);
     }
+
+    const std::vector<Sphere>& getSpheres() const {
+        return spheres;
+    }
 };
 
 

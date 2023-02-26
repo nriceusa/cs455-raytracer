@@ -13,10 +13,14 @@ private:
     float radius;
 
 public:
-    Sphere() : radius(1) {}
+    explicit Sphere(const float radius) : radius(radius), Geometry() {}
 
-    Sphere(Material& material, const float radius, const float xLoc, const float yLoc, const float zLoc) :
-           radius(radius), Geometry(material, xLoc, yLoc, zLoc) {}
+    Sphere(Material& material, const float radius, const Vector3& location) :
+           radius(radius), Geometry(material, location) {}
+
+    const Vector3& getCenter() const {
+        return Geometry::getLocation();
+    }
 
     float getRadius() const {
         return radius;

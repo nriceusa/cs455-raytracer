@@ -6,11 +6,18 @@
 #define PROGRAM5_LIGHT_H
 
 
-#include <vector>
 #include "SceneComponent.h"
 
-class Light: SceneComponent {
+class Light: public SceneComponent {
+protected:
+    Light() : SceneComponent() {}
 
+    explicit Light(const Vector3& location) : SceneComponent(location) {}
+
+    Light(const Vector3& location, const Vector3& rotation) : SceneComponent(location, rotation) {}
+
+    Light(const Vector3& location, const Vector3& rotation, const Vector3& scale) :
+          SceneComponent(location, rotation, scale) {}
 };
 
 
