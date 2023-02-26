@@ -12,81 +12,75 @@
 
 class SceneComponent {
 private:
-    std::vector<float> location;
-    std::vector<float> rotation;
-    std::vector<float> scale;
+    std::vector<double> location;
+    std::vector<double> rotation;
+    std::vector<double> scale;
 
 protected:
-    SceneComponent() : location(3, 0), rotation(3, 0), scale(3, 0) {}
+    SceneComponent() : location(3, 0), rotation(3, 0), scale(3, 1) {}
 
-    SceneComponent(const float xLoc, const float yLoc, const float zLoc) : location(3), rotation(3, 0), scale(3, 0) {
-        setLocation(xLoc, yLoc, zLoc);
-    }
+    SceneComponent(const double xLoc, const double yLoc, const double zLoc) :
+                   location{xLoc, yLoc, zLoc}, rotation(3, 0), scale(3, 1) {}
 
-    SceneComponent(const float xLoc, const float yLoc, const float zLoc,
-                   const float xRot, const float yRot, const float zRot) : location(3), rotation(3), scale(3, 0) {
-        setLocation(xLoc, yLoc, zLoc);
-        setRotation(xRot, yRot, zRot);
-    }
+    SceneComponent(const double xLoc, const double yLoc, const double zLoc,
+                   const double xRot, const double yRot, const double zRot) :
+                   location{xLoc, yLoc, zLoc}, rotation{xRot, yRot, zRot}, scale(3, 1) {}
 
-    SceneComponent(const float xLoc, const float yLoc, const float zLoc,
-                   const float xRot, const float yRot, const float zRot,
-                   const float xScale, const float yScale, const float zScale) : location(3), rotation(3), scale(3) {
-        setLocation(xLoc, yLoc, zLoc);
-        setRotation(xRot, yRot, zRot);
-        setScale(xScale, yScale, zScale);
-    }
+    SceneComponent(const double xLoc, const double yLoc, const double zLoc,
+                   const double xRot, const double yRot, const double zRot,
+                   const double xScale, const double yScale, const double zScale) :
+                   location{xLoc, yLoc, zLoc}, rotation{xRot, yRot, zRot}, scale{xScale, yScale, zScale} {}
 
 public:
-    const std::vector<float> &getLocation() const {
+    const std::vector<double> &getLocation() const {
         return location;
     }
 
-    const std::vector<float> &getRotation() const {
+    const std::vector<double> &getRotation() const {
         return rotation;
     }
 
-    const std::vector<float> &getScale() const {
+    const std::vector<double> &getScale() const {
         return scale;
     }
 
-    float getLocationX() {
+    double getLocationX() {
         return location.at(0);
     }
 
-    float getLocationY() {
+    double getLocationY() {
         return location.at(1);
     }
 
-    float getLocationZ() {
+    double getLocationZ() {
         return location.at(2);
     }
 
-    float getRotationX() {
+    double getRotationX() {
         return rotation.at(0);
     }
 
-    float getRotationY() {
+    double getRotationY() {
         return rotation.at(1);
     }
 
-    float getRotationZ() {
+    double getRotationZ() {
         return rotation.at(2);
     }
 
-    void setLocation(const float x, const float y, const float z) {
+    void setLocation(const double x, const double y, const double z) {
         location.at(0) = x;
         location.at(1) = y;
         location.at(2) = z;
     }
 
-    void setRotation(const float x, const float y, const float z) {
+    void setRotation(const double x, const double y, const double z) {
         rotation.at(0) = x;
         rotation.at(1) = y;
         rotation.at(2) = z;
     }
 
-    void setScale(const float x, const float y, const float z) {
+    void setScale(const double x, const double y, const double z) {
         scale.at(0) = x;
         scale.at(1) = y;
         scale.at(2) = z;

@@ -23,7 +23,7 @@ public:
     Screen(const size_t width, const size_t height) :
         pixels(std::vector<std::vector<Pixel>>(width, std::vector<Pixel>(height))) {}
 
-    size_t getWidth() {
+    size_t getWidth() const {
         return pixels.capacity();
     }
 

@@ -7,12 +7,19 @@
 
 
 #include "../SceneComponent.h"
+#include "Material.h"
 
-class Geometry: SceneComponent {
+class Geometry: public SceneComponent {
+private:
+    const Material material;
+
 protected:
-    Geometry() : SceneComponent() {}
+    Geometry() :
+        material(0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5),
+        SceneComponent() {}
 
-    Geometry(const float xLoc, const float yLoc, const float zLoc) : SceneComponent(xLoc, yLoc, zLoc) {}
+    Geometry(Material& material, const float xLoc, const float yLoc, const float zLoc) :
+             material(material), SceneComponent(xLoc, yLoc, zLoc) {}
 };
 
 

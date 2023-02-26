@@ -15,7 +15,8 @@ private:
 public:
     Sphere() : radius(1) {}
 
-    Sphere(const float radius, const float xLoc, const float yLoc, const float zLoc) : radius(radius), Geometry(xLoc, yLoc, zLoc) {}
+    Sphere(Material& material, const float radius, const float xLoc, const float yLoc, const float zLoc) :
+           radius(radius), Geometry(material, xLoc, yLoc, zLoc) {}
 
     float getRadius() const {
         return radius;
