@@ -6,6 +6,8 @@
 #define PROGRAM5_RAYTRACER_H
 
 
+#include <cmath>
+#include <iostream>
 #include "Image/Screen.h"
 #include "Scene.h"
 #include "SceneComponent/Ray.h"
@@ -32,6 +34,8 @@ public:
 
                 std::vector<double> rayDirection{xDestination, yDestination, zDestination};
                 Ray ray(scene.getCamera().getLocation(), rayDirection);
+
+
             }
         }
     }
