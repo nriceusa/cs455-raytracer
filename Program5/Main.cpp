@@ -20,7 +20,7 @@ int main() {
     outputFile.open(outputFileName);
 
     const size_t image_width = 256;
-    const size_t image_height = 128;
+    const size_t image_height = 256;
 
     Camera camera(90, Vector3(0, 0, 1), Vector3(0, 0, 0));
     Scene scene(51, 51, 51, camera);

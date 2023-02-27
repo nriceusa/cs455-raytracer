@@ -35,23 +35,22 @@ public:
         return pixels.at(x).at(y);
     }
 
-    void setPixel(const size_t x, const size_t y, const Pixel &pixel) {
-        pixels.at(x).at(y) = pixel;
-    }
-
     void setPixelColor(const size_t x, const size_t y, const double r, const double g, const double b) {
-        pixels.at(x).at(y).setRGB(static_cast<unsigned char>(r * 255),
-                                        static_cast<unsigned char>(g * 255),
-                                        static_cast<unsigned char>(b * 255));
+        pixels.at(x).at(y).setRGB(convertToChar(r), convertToChar(g), convertToChar(b));
     }
 
-    friend std::ostream &operator<<(std::ostream &os, const Screen &screen) {
-        for (const std::vector<Pixel>& column : screen.pixels) {
-            for (Pixel pixel : column) {
-                os << pixel << "  ";
+    static unsigned char convertToChar(const double value) {
+        return static_cast<unsigned char>(value * 255);
+    }
+
+    friend std::ostream &operator<<(std::ostream &os, Screen& screen) {
+        for (size_t y = 0; y < screen.getHeight(); ++y) {
+            for (size_t x = 0; x < screen.getWidth(); ++x) {
+                os << screen.getPixel(x, y) << "  ";
             }
             os << std::endl;
         }
+
         return os;
     }
 };

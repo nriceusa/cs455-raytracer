@@ -35,14 +35,18 @@ public:
         return direction;
     }
 
-    bool hitSphere(const Sphere& sphere) const {
+    double hitSphere(const Sphere& sphere) const {
         Vector3 oc = origin - sphere.getCenter();
         double a = Vector3::dot(direction, direction);
         double b = 2 * Vector3::dot(oc, direction);
         double c = Vector3::dot(oc, oc) - (sphere.getRadius() * sphere.getRadius());
 
         double discriminant = (b * b) - (4 * a * c);
-        return (discriminant > 0);
+        if (discriminant < 0) {
+            return -1;
+        } else {
+            return (-b -sqrt(discriminant)) / (2 * a);
+        }
     }
 
     friend std::ostream &operator<<(std::ostream &os, const Ray &ray) {

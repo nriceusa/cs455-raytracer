@@ -15,10 +15,10 @@
 class RayTracer {
 private:
     Screen& screen;
-    const Scene scene;
+    const Scene& scene;
 
 public:
-    RayTracer(Screen& screen, Scene& scene) : screen(screen), scene(scene) {}
+    RayTracer(Screen& screen, const Scene& scene) : screen(screen), scene(scene) {}
 
     void render() {
         double cameraFov = scene.getCamera().getFov();
@@ -32,16 +32,22 @@ public:
 
             for (size_t y = 0; y < screen.getHeight(); ++y) {
                 rayDestination.setY(-(static_cast<double>(y) - static_cast<double>(screen.getHeight()) / 2));
-                Ray ray(scene.getCamera().getLocation(), rayDestination);
 
+                Ray ray(scene.getCamera().getLocation(), rayDestination);
                 for (const Sphere& sphere : scene.getSpheres()) {
-                    if (ray.hitSphere(sphere)) {
-                        screen.setPixelColor(x, y, 1, 0, 0);
+                    double t = ray.hitSphere(sphere);
+                    if (t > 0) {
+                        Vector3 normal = Vector3::normalize(ray.at(t) - Vector3(0, 0, -1));  // TODO: implement at()
+                        screen.setPixelColor(x, y, 0.5 * (normal.getX() + 1), 0.5 * (normal.getY() + 1), 0.5 * (normal.getZ() + 1));
+                    } else {
+                        screen.setPixelColor(x, y,
+                                             scene.getSkyColorR(), scene.getSkyColorG(), scene.getSkyColorB());
                     }
                 }
             }
         }
     }
+
 };
 
 
