@@ -72,5 +72,11 @@ void renderScene2(Screen& screen, Scene& scene) {
     Sphere greenSphere(greenMaterial, 0.3, Vector3(-0.6, 0, 0));
     Sphere blueSphere(blueMaterial, 10000, Vector3(0, -10000.5, 0));
 
-    
+    scene.addSphere(blueSphere);
+    scene.addSphere(sphereWhite);
+    scene.addSphere(redSphere);
+    scene.addSphere(greenSphere);
+
+    RayTracer rayTracer(screen, scene);
+    rayTracer.render();
 }
