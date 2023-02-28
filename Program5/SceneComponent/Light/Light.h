@@ -6,7 +6,7 @@
 #define PROGRAM5_LIGHT_H
 
 
-#include "SceneComponent.h"
+#include "../SceneComponent.h"
 
 class Light: public SceneComponent {
 private:

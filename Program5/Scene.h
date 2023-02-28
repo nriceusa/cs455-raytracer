@@ -9,7 +9,7 @@
 #include <vector>
 #include "SceneComponent/Camera.h"
 #include "SceneComponent/Geometry/Sphere.h"
-#include "SceneComponent/Light.h"
+#include "SceneComponent/Light/Light.h"
 
 class Scene {
 private:

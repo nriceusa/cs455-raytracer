@@ -6,9 +6,9 @@
 #include "Image/Screen.h"
 #include "SceneComponent/Camera.h"
 #include "Scene.h"
-#include "RayTracer.h"
+#include "RayTracer/RayTracer.h"
 #include "Vector3.h"
-#include "SceneComponent/LightDirectional.h"
+#include "SceneComponent/Light/LightDirectional.h"
 
 void renderScene1(Screen& screen, Scene& scene);
 void renderScene2(Screen& screen, Scene& scene);
@@ -25,14 +25,14 @@ int main() {
     const size_t image_width = 512;
     const size_t image_height = 512;
 
-    Camera camera(60, Vector3(0, 0, 1), Vector3(0, 0, 0));
-
     // Scene 1
+//    Camera camera(60, Vector3(0, 0, 1), Vector3(0, 0, 0));
 //    Scene scene(51, 51, 51, camera, Vector3(0, 0, 0));
 //    Screen screen(image_width, image_height, scene.getSkyColorR(), scene.getSkyColorG(), scene.getSkyColorG());
 //    renderScene1(screen, scene);
 
     // Scene 2
+    Camera camera(60, Vector3(0, 0, 1), Vector3(0, 0, 0));
     Scene scene(51, 51, 51, camera, Vector3(0.2, 0.2, 0.2));
     Screen screen(image_width, image_height, scene.getSkyColorR(), scene.getSkyColorG(), scene.getSkyColorG());
     renderScene2(screen, scene);
@@ -59,7 +59,7 @@ void renderScene1(Screen& screen, Scene& scene) {
 }
 
 void renderScene2(Screen& screen, Scene& scene) {
-    LightDirectional light(Vector3(1, 1, 1), Vector3(5, 5, 5), Vector3(0, -1, 0));
+    LightDirectional light(Vector3(1, 1, 1), Vector3(10000, 10000, 10000), Vector3(0, -1, 0));
     scene.addLight(light);
 
     Material whiteMaterial(0.8, 0.1, 0.3, 1, 1, 1, 1, 1, 1, 4);

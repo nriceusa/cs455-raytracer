@@ -8,7 +8,7 @@
 
 #include <ostream>
 #include "../Vector3.h"
-#include "Light.h"
+#include "../SceneComponent/Light/Light.h"
 
 class Ray {
 private:
@@ -59,15 +59,15 @@ public:
 
     Vector3 computerSurfaceColor(const Vector3& intersect, const Vector3& normal, const Vector3& ambientColor,
                                  const Material& material, const Light& light) const {
-        // Compute diffuse
         const Vector3 l = Vector3::normalize(light.getLocation() - intersect);
         const Vector3 n = Vector3::normalize(normal);
+        const Vector3 v = Vector3::normalize(origin - intersect);
 
+        // Compute diffuse
         double angleToLight = Vector3::dot(n, l);
         if (angleToLight < 0) {
             angleToLight = 0;
         }
-
         const Vector3 id = material.getKd() * light.getIp() * material.getOd() * angleToLight;
 
         // Compute ambience
@@ -75,13 +75,13 @@ public:
 
         // Compute specular highlight
         const Vector3 r = 2 * n * Vector3::dot(n, l) - l;
-        double angleToReflection = Vector3::dot(origin, r);
+        double angleToReflection = Vector3::dot(v, r);
         if (angleToReflection < 0) {
             angleToReflection = 0;
         }
-
         const Vector3 is = material.getKs() * light.getIp() * material.getOs() * pow(angleToReflection, material.getKgls());
 
+        // Sum lighting components
         return id + ia + is;
     }
 

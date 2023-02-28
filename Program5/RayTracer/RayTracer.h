@@ -8,9 +8,9 @@
 
 #include <cmath>
 #include <iostream>
-#include "Image/Screen.h"
-#include "Scene.h"
-#include "SceneComponent/Ray.h"
+#include "../Image/Screen.h"
+#include "../Scene.h"
+#include "Ray.h"
 
 class RayTracer {
 private:
