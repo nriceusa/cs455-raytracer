@@ -1,4 +1,5 @@
 *.idea
 *.ppm
+*.zip
 Renders
 cmake-build-debug
