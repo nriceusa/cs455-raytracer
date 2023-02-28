@@ -54,10 +54,10 @@ public:
         return *this;
     }
 
-    Vector3& operator*=(const double multiplier) {
-        x *= multiplier;
-        y *= multiplier;
-        z *= multiplier;
+    Vector3& operator*=(const double factor) {
+        x *= factor;
+        y *= factor;
+        z *= factor;
         return *this;
     }
 
@@ -97,14 +97,12 @@ public:
                        vectorLeft.getZ() * vectorRight.getZ()};
     }
 
-    friend Vector3 operator*(const double multiplier, const Vector3& vector) {
-        return Vector3{multiplier * vector.getX(),
-                       multiplier * vector.getY(),
-                       multiplier * vector.getZ()};
+    friend Vector3 operator*(const double factor, const Vector3& vector) {
+        return Vector3{factor * vector.getX(),factor * vector.getY(),factor * vector.getZ()};
     }
 
-    friend Vector3 operator*(const Vector3& vector, const double multiplier) {
-        return multiplier * vector;
+    friend Vector3 operator*(const Vector3& vector, const double factor) {
+        return factor * vector;
     }
 
     friend Vector3 operator/(const Vector3& vector, const double dividend) {

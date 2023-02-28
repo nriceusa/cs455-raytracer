@@ -7,7 +7,7 @@
 #include <cmath>
 #include "SceneComponent.h"
 
-class Camera: public SceneComponent {
+class Camera: SceneComponent {
 private:
     const double fov;
 
@@ -26,6 +26,14 @@ public:
 //           const double xLookAt, const double yLookAt, const double zLookAt) :
 //           fov(degreesToRadians(fovInDegrees)),
 //           SceneComponent(xOrigin, yOrigin, zOrigin, xLookAt, yLookAt, zLookAt) {}  // TODO : Remove this constructor
+
+    const Vector3& getOrigin() const {
+        return SceneComponent::getLocation();
+    }
+
+    const Vector3& getTarget() const {
+        return SceneComponent::getRotation();
+    }
 
     double getFov() const {
         return fov;

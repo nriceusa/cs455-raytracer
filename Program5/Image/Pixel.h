@@ -19,7 +19,7 @@ private:
 public:
     Pixel() : R(0), G(0), B(0) {}
 
-    Pixel(unsigned char r, unsigned char g, unsigned char b) : R(r), G(g), B(b) {}
+    Pixel(const unsigned char r, const unsigned char g, const unsigned char b) : R(r), G(g), B(b) {}
 
     float getR() const {
         return R;

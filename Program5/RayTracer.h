@@ -21,31 +21,39 @@ public:
     RayTracer(Screen& screen, const Scene& scene) : screen(screen), scene(scene) {}
 
     void render() {
-        double cameraFov = scene.getCamera().getFov();
+        Vector3 rayVector = (scene.getCamera().getTarget() - scene.getCamera().getOrigin());
 
-        Vector3 rayDestination(0, 0, 0);
-        rayDestination.setZ((static_cast<double>(screen.getWidth()) / 2) /
-                            tan(scene.getCamera().getFov() / 2));
+        const double xOffset = rayVector.getZ() * tan(scene.getCamera().getFov() / 2);
+        const double yOffset = -xOffset * (static_cast<double>(screen.getHeight()) / static_cast<double>(screen.getWidth()));
+        const double rayWidth = (2 * -xOffset) / static_cast<double>(screen.getWidth());
+        const double initial_x = rayVector.getX() + xOffset;
+        const double initial_y = rayVector.getY() + yOffset;
 
+//        std::cout << "Ray Width: " << rayWidth << std::endl;
+//        std::cout << "Initial X: " << initial_x << std::endl;
+//        std::cout << "Initial Y: " << initial_y << std::endl;
+
+        rayVector.setX(initial_x);
         for (size_t x = 0; x < screen.getWidth(); ++x) {
-            rayDestination.setX(static_cast<double>(x) - (static_cast<double>(screen.getWidth()) / 2));
+            rayVector.setX(rayVector.getX() + rayWidth);
 
+            rayVector.setY(initial_y);
             for (size_t y = 0; y < screen.getHeight(); ++y) {
-                rayDestination.setY(-(static_cast<double>(y) - static_cast<double>(screen.getHeight()) / 2));
+                rayVector.setY(rayVector.getY() - rayWidth);
 
-                Ray ray(scene.getCamera().getLocation(), rayDestination);
+                Ray ray(scene.getCamera().getOrigin(), rayVector);
                 for (const Sphere& sphere : scene.getSpheres()) {
                     double t = ray.hitSphere(sphere);
                     if (t > 0) {
-                        Vector3 normal = Vector3::normalize(ray.at(t) - Vector3(0, 0, -1));  // TODO: implement at()
+                        Vector3 normal = Vector3::normalize(ray.at(t) - Vector3(0, 0, -1));
                         screen.setPixelColor(x, y, 0.5 * (normal.getX() + 1), 0.5 * (normal.getY() + 1), 0.5 * (normal.getZ() + 1));
-                    } else {
-                        screen.setPixelColor(x, y,
-                                             scene.getSkyColorR(), scene.getSkyColorG(), scene.getSkyColorB());
                     }
                 }
             }
         }
+
+//        std::cout << "Final X: " << rayVector.getX() << std::endl;
+//        std::cout << "Final Y: " << rayVector.getY() << std::endl;
     }
 
 };

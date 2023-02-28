@@ -29,7 +29,7 @@ int main() {
     Sphere sphere(sphereMaterial, 0.4, Vector3(0, 0, 0));
     scene.addSphere(sphere);
 
-    Screen screen(image_width, image_height);
+    Screen screen(image_width, image_height, scene.getSkyColorR(), scene.getSkyColorG(), scene.getSkyColorG());
     RayTracer rayTracer(screen, scene);
 
     rayTracer.render();

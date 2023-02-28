@@ -12,45 +12,51 @@
 class Ray {
 private:
     const Vector3 origin;
-    const Vector3 direction;
+    const Vector3 destination;
 
 public:
-    Ray() : origin(0, 0, 0), direction(0, 1, 0) {}
+    Ray() : origin(0, 0, 0), destination(0, 1, 0) {}
 
     Ray(const Vector3& origin, const Vector3& direction) :
-        origin(origin), direction(direction) {}
+            origin(origin), destination(direction) {}
 
     Ray(const double xOrigin, const double yOrigin, const double zOrigin) :
-        origin(xOrigin, yOrigin, zOrigin), direction(0, 1, 0) {}
+            origin(xOrigin, yOrigin, zOrigin), destination(0, 1, 0) {}
 
     Ray(const double xOrigin, const double yOrigin, const double zOrigin,
         const double xDirection, const double yDirection, const double zDirection) :
-        origin(xOrigin, yOrigin, zOrigin), direction(xOrigin, yOrigin, zOrigin) {}
+            origin(xOrigin, yOrigin, zOrigin), destination(xOrigin, yOrigin, zOrigin) {}
 
     const Vector3& getOrigin() const {
         return origin;
     }
 
-    const Vector3& getDirection() const {
-        return direction;
+    const Vector3& getDestination() const {
+        return destination;
+    }
+
+    Vector3 at(double position) const {
+        return origin + (position * destination);
     }
 
     double hitSphere(const Sphere& sphere) const {
-        Vector3 oc = origin - sphere.getCenter();
-        double a = Vector3::dot(direction, direction);
-        double b = 2 * Vector3::dot(oc, direction);
-        double c = Vector3::dot(oc, oc) - (sphere.getRadius() * sphere.getRadius());
+//        Vector3 rayDirection = Vector3::normalize(destination);
+        Vector3 originToCenter = origin - sphere.getCenter();
 
-        double discriminant = (b * b) - (4 * a * c);
+        double a = Vector3::dot(destination, destination);
+        double halfB = Vector3::dot(originToCenter, destination);
+        double c = originToCenter.getLength() * originToCenter.getLength() - (sphere.getRadius() * sphere.getRadius());
+
+        double discriminant = halfB * halfB - a * c;
         if (discriminant < 0) {
             return -1;
         } else {
-            return (-b -sqrt(discriminant)) / (2 * a);
+            return (-halfB - sqrt(discriminant)) / a;
         }
     }
 
     friend std::ostream &operator<<(std::ostream &os, const Ray &ray) {
-        os << "origin: " << ray.origin << " direction: " << ray.direction;
+        os << "origin: " << ray.origin << " destination: " << ray.destination;
         return os;
     }
 };

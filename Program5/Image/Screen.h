@@ -23,6 +23,10 @@ public:
     Screen(const size_t width, const size_t height) :
         pixels(std::vector<std::vector<Pixel>>(width, std::vector<Pixel>(height))) {}
 
+    Screen(const size_t width, const size_t height,
+           const unsigned char r, const unsigned char g, const unsigned char b) :
+           pixels(std::vector<std::vector<Pixel>>(width, std::vector<Pixel>(height, Pixel(r, g, b)))) {}
+
     size_t getWidth() const {
         return pixels.capacity();
     }
