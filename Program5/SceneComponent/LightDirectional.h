@@ -9,7 +9,8 @@
 #include "Light.h"
 
 class LightDirectional: public Light {
-
+public:
+    LightDirectional(const Vector3& Ip, const Vector3& location, const Vector3& rotation) : Light(Ip, location, rotation) {}
 };
 
 

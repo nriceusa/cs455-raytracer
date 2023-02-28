@@ -98,7 +98,9 @@ public:
     }
 
     friend Vector3 operator*(const double factor, const Vector3& vector) {
-        return Vector3{factor * vector.getX(),factor * vector.getY(),factor * vector.getZ()};
+        return Vector3{factor * vector.getX(),
+                       factor * vector.getY(),
+                       factor * vector.getZ()};
     }
 
     friend Vector3 operator*(const Vector3& vector, const double factor) {

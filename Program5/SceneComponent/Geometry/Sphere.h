@@ -29,6 +29,10 @@ public:
     void setRadius(float newRadius) {
         Sphere::radius = newRadius;
     }
+
+    const Material& getSphereMaterial() const {
+        return Geometry::getMaterial();
+    }
 };
 
 

@@ -8,6 +8,7 @@
 
 #include <ostream>
 #include "../Vector3.h"
+#include "Light.h"
 
 class Ray {
 private:
@@ -54,6 +55,34 @@ public:
         } else {
             return (-halfB - sqrt(discriminant)) / a;
         }
+    }
+
+    Vector3 computerSurfaceColor(const Vector3& intersect, const Vector3& normal, const Vector3& ambientColor,
+                                 const Material& material, const Light& light) const {
+        // Compute diffuse
+        const Vector3 l = Vector3::normalize(light.getLocation() - intersect);
+        const Vector3 n = Vector3::normalize(normal);
+
+        double angleToLight = Vector3::dot(n, l);
+        if (angleToLight < 0) {
+            angleToLight = 0;
+        }
+
+        const Vector3 id = material.getKd() * light.getIp() * material.getOd() * angleToLight;
+
+        // Compute ambience
+        const Vector3 ia = material.getKa() * ambientColor * material.getOd();
+
+        // Compute specular highlight
+        const Vector3 r = 2 * n * Vector3::dot(n, l) - l;
+        double angleToReflection = Vector3::dot(origin, r);
+        if (angleToReflection < 0) {
+            angleToReflection = 0;
+        }
+
+        const Vector3 is = material.getKs() * light.getIp() * material.getOs() * pow(angleToReflection, material.getKgls());
+
+        return id + ia + is;
     }
 
     friend std::ostream &operator<<(std::ostream &os, const Ray &ray) {

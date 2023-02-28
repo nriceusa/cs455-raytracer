@@ -45,10 +45,14 @@ public:
                 for (const Sphere& sphere : scene.getSpheres()) {
                     double t = ray.hitSphere(sphere);
                     if (t > 0) {
-                        Vector3 intersect = ray.at(t);
-                        Vector3 normal = (intersect - sphere.getCenter()) / sphere.getRadius();
+                        const Vector3 intersect = ray.at(t);
+                        const Vector3 normal = (intersect - sphere.getCenter()) / sphere.getRadius();
                         screen.setPixelColor(x, y, 0.5 * (normal.getX() + 1), 0.5 * (normal.getY() + 1), 0.5 * (normal.getZ() + 1));
-                        
+
+                        // Only accounts for one light
+                        Vector3 surfaceColor = ray.computerSurfaceColor(intersect, normal, scene.getSkyColor(),
+                                                                        sphere.getSphereMaterial(), scene.getLights().at(0));
+                        screen.setPixelColor(x, y, surfaceColor.getX(), surfaceColor.getY(), surfaceColor.getZ());
                     }
                 }
             }

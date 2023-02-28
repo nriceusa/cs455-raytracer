@@ -9,6 +9,7 @@
 #include <vector>
 #include "SceneComponent/Camera.h"
 #include "SceneComponent/Geometry/Sphere.h"
+#include "SceneComponent/Light.h"
 
 class Scene {
 private:
@@ -18,6 +19,7 @@ private:
 
     const Camera camera;
     std::vector<Sphere> spheres;
+    std::vector<Light> lights;
 
 public:
     Scene() : skyColorR(127), skyColorG(127), skyColorB(127), camera() {}
@@ -37,6 +39,12 @@ public:
         return skyColorB;
     }
 
+    Vector3 getSkyColor() const {
+        return Vector3{static_cast<double>(skyColorR) / 255,
+                       static_cast<double>(skyColorG) / 255,
+                       static_cast<double>(skyColorB) / 255};
+    }
+
     const Camera &getCamera() const {
         return camera;
     }
@@ -47,6 +55,14 @@ public:
 
     void addSphere(const Sphere& sphere) {
         spheres.push_back(sphere);
+    }
+
+    const std::vector<Light>& getLights() const {
+        return lights;
+    }
+
+    void addLight(const Light& light) {
+        lights.push_back(light);
     }
 };
 

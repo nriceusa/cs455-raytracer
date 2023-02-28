@@ -26,6 +26,11 @@ protected:
 
     Geometry(Material& material, const Vector3& location, const Vector3& rotation, const Vector3& scale) :
             material(material), SceneComponent(location, rotation, scale) {}
+
+public:
+    const Material& getMaterial() const {
+        return material;
+    }
 };
 
 
