@@ -41,12 +41,14 @@ public:
             for (size_t y = 0; y < screen.getHeight(); ++y) {
                 rayVector.setY(rayVector.getY() - rayWidth);
 
-                Ray ray(scene.getCamera().getOrigin(), rayVector);
+                Ray ray(scene, scene.getCamera().getOrigin(), rayVector);
                 for (const Sphere& sphere : scene.getSpheres()) {
                     double t = ray.hitSphere(sphere);
                     if (t > 0) {
-                        Vector3 normal = Vector3::normalize(ray.at(t) - Vector3(0, 0, -1));
+                        Vector3 intersect = ray.at(t);
+                        Vector3 normal = (intersect - sphere.getCenter()) / sphere.getRadius();
                         screen.setPixelColor(x, y, 0.5 * (normal.getX() + 1), 0.5 * (normal.getY() + 1), 0.5 * (normal.getZ() + 1));
+                        
                     }
                 }
             }

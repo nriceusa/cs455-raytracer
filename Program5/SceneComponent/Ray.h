@@ -11,21 +11,22 @@
 
 class Ray {
 private:
+    const Scene& scene;
     const Vector3 origin;
     const Vector3 destination;
 
 public:
-    Ray() : origin(0, 0, 0), destination(0, 1, 0) {}
+    explicit Ray(const Scene& scene) : scene(scene), origin(0, 0, 0), destination(0, 1, 0) {}
 
-    Ray(const Vector3& origin, const Vector3& direction) :
-            origin(origin), destination(direction) {}
+    Ray(const Scene& scene, const Vector3& origin, const Vector3& direction) :
+        scene(scene), origin(origin), destination(direction) {}
 
-    Ray(const double xOrigin, const double yOrigin, const double zOrigin) :
-            origin(xOrigin, yOrigin, zOrigin), destination(0, 1, 0) {}
+    Ray(const Scene& scene, const double xOrigin, const double yOrigin, const double zOrigin) :
+        scene(scene), origin(xOrigin, yOrigin, zOrigin), destination(0, 1, 0) {}
 
-    Ray(const double xOrigin, const double yOrigin, const double zOrigin,
+    Ray(const Scene& scene, const double xOrigin, const double yOrigin, const double zOrigin,
         const double xDirection, const double yDirection, const double zDirection) :
-            origin(xOrigin, yOrigin, zOrigin), destination(xOrigin, yOrigin, zOrigin) {}
+        scene(scene), origin(xOrigin, yOrigin, zOrigin), destination(xOrigin, yOrigin, zOrigin) {}
 
     const Vector3& getOrigin() const {
         return origin;
@@ -41,11 +42,11 @@ public:
 
     double hitSphere(const Sphere& sphere) const {
 //        Vector3 rayDirection = Vector3::normalize(destination);
-        Vector3 originToCenter = origin - sphere.getCenter();
+        Vector3 oc = origin - sphere.getCenter();
 
         double a = Vector3::dot(destination, destination);
-        double halfB = Vector3::dot(originToCenter, destination);
-        double c = originToCenter.getLength() * originToCenter.getLength() - (sphere.getRadius() * sphere.getRadius());
+        double halfB = Vector3::dot(oc, destination);
+        double c = oc.getLength() * oc.getLength() - (sphere.getRadius() * sphere.getRadius());
 
         double discriminant = halfB * halfB - a * c;
         if (discriminant < 0) {

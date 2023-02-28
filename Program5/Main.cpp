@@ -22,7 +22,7 @@ int main() {
     const size_t image_width = 256;
     const size_t image_height = 256;
 
-    Camera camera(90, Vector3(0, 0, 1), Vector3(0, 0, 0));
+    Camera camera(60, Vector3(0, 0, 1), Vector3(0, 0, 0));
     Scene scene(51, 51, 51, camera);
 
     Material sphereMaterial(0.7, 0.2, 0.1, 1, 0, 1, 1, 1, 1, 16);
