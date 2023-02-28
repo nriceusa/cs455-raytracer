@@ -50,7 +50,7 @@ public:
                         screen.setPixelColor(x, y, 0.5 * (normal.getX() + 1), 0.5 * (normal.getY() + 1), 0.5 * (normal.getZ() + 1));
 
                         // Only accounts for one light
-                        Vector3 surfaceColor = ray.computerSurfaceColor(intersect, normal, scene.getSkyColor(),
+                        Vector3 surfaceColor = ray.computerSurfaceColor(intersect, normal, scene.getAmbientLight(),
                                                                         sphere.getSphereMaterial(), scene.getLights().at(0));
                         screen.setPixelColor(x, y, surfaceColor.getX(), surfaceColor.getY(), surfaceColor.getZ());
                     }
