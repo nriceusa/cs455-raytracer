@@ -29,10 +29,6 @@ public:
         const double initial_x = rayVector.getX() + xOffset;
         const double initial_y = rayVector.getY() + yOffset;
 
-//        std::cout << "Ray Width: " << rayWidth << std::endl;
-//        std::cout << "Initial X: " << initial_x << std::endl;
-//        std::cout << "Initial Y: " << initial_y << std::endl;
-
         rayVector.setX(initial_x);
         for (size_t x = 0; x < screen.getWidth(); ++x) {
             rayVector.setX(rayVector.getX() + rayWidth);
@@ -50,18 +46,15 @@ public:
                         screen.setPixelColor(x, y, 0.5 * (normal.getX() + 1), 0.5 * (normal.getY() + 1), 0.5 * (normal.getZ() + 1));
 
                         // Only accounts for one light
-                        Vector3 surfaceColor = ray.computerSurfaceColor(intersect, normal, scene.getAmbientLight(),
-                                                                        sphere.getSphereMaterial(), scene.getLights().at(0));
+                        Vector3 surfaceColor = ray.computeSurfaceColor(intersect, normal, scene.getAmbientLight(),
+                                                                       sphere.getSphereMaterial(),
+                                                                       scene.getLights().at(0));
                         screen.setPixelColor(x, y, surfaceColor.getX(), surfaceColor.getY(), surfaceColor.getZ());
                     }
                 }
             }
         }
-
-//        std::cout << "Final X: " << rayVector.getX() << std::endl;
-//        std::cout << "Final Y: " << rayVector.getY() << std::endl;
     }
-
 };
 
 

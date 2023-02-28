@@ -57,8 +57,8 @@ public:
         }
     }
 
-    Vector3 computerSurfaceColor(const Vector3& intersect, const Vector3& normal, const Vector3& ambientColor,
-                                 const Material& material, const Light& light) const {
+    Vector3 computeSurfaceColor(const Vector3& intersect, const Vector3& normal, const Vector3& ambientColor,
+                                const Material& material, const Light& light) const {
         const Vector3 l = Vector3::normalize(light.getLocation() - intersect);
         const Vector3 n = Vector3::normalize(normal);
         const Vector3 v = Vector3::normalize(origin - intersect);
@@ -82,7 +82,11 @@ public:
         const Vector3 is = material.getKs() * light.getIp() * material.getOs() * pow(angleToReflection, material.getKgls());
 
         // Sum lighting components
-        return id + ia + is;
+        Vector3 surfaceColor = id + ia + is;
+        surfaceColor.setX(surfaceColor.getX() > 1 ? 1 : surfaceColor.getX());
+        surfaceColor.setY(surfaceColor.getY() > 1 ? 1 : surfaceColor.getY());
+        surfaceColor.setZ(surfaceColor.getZ() > 1 ? 1 : surfaceColor.getZ());
+        return surfaceColor;
     }
 
     friend std::ostream &operator<<(std::ostream &os, const Ray &ray) {
