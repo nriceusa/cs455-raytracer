@@ -38,6 +38,8 @@ public:
                 rayVector.setY(rayVector.getY() - rayWidth);
 
                 Ray ray(scene, scene.getCamera().getOrigin(), rayVector);
+
+                // Check for intersections with spheres
                 for (const Sphere& sphere : scene.getSpheres()) {
                     double t = ray.hitSphere(sphere);
                     if (t > 0) {
@@ -51,6 +53,11 @@ public:
                                                                        scene.getLights().at(0));
                         screen.setPixelColor(x, y, surfaceColor.getX(), surfaceColor.getY(), surfaceColor.getZ());
                     }
+                }
+
+                // Check for intersections with triangles
+                for (const Triangle& triangle : scene.getTriangles()) {
+                    // TODO: calculate triangle intersections
                 }
             }
         }

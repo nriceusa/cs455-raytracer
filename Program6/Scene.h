@@ -10,6 +10,7 @@
 #include "SceneComponent/Camera.h"
 #include "SceneComponent/Geometry/Sphere.h"
 #include "SceneComponent/Light/Light.h"
+#include "SceneComponent/Geometry/Triangle.h"
 
 class Scene {
 private:
@@ -19,6 +20,7 @@ private:
 
     const Camera camera;
     std::vector<Sphere> spheres;
+    std::vector<Triangle> triangles;
     std::vector<Light> lights;
     Vector3 ambientLight;
 
@@ -57,6 +59,14 @@ public:
 
     void addSphere(const Sphere& sphere) {
         spheres.push_back(sphere);
+    }
+
+    const std::vector<Triangle>& getTriangles() const {
+        return triangles;
+    }
+
+    void addTriangle(const Triangle& triangle) {
+        triangles.push_back(triangle);
     }
 
     const std::vector<Light>& getLights() const {

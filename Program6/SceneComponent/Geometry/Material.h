@@ -14,11 +14,12 @@ private:
     const Vector3 Od;
     const Vector3 Os;
     const double Kgls;
+    const double Refl;
 
 public:
     Material(const double Kd, const double Ks, const double Ka, const double OdR, const double OdG, const double OdB,
-             const double OsR, const double OsG, const double OsB, const double Kgls) :
-             Kd(Kd), Ks(Ks), Ka(Ka), Od(OdR, OdG, OdB), Os(OsR, OsG, OsB), Kgls(Kgls) {}
+             const double OsR, const double OsG, const double OsB, const double Kgls, const double Refl) :
+             Kd(Kd), Ks(Ks), Ka(Ka), Od(OdR, OdG, OdB), Os(OsR, OsG, OsB), Kgls(Kgls), Refl(Refl) {}
 
     double getKd() const {
         return Kd;
@@ -42,6 +43,10 @@ public:
 
     double getKgls() const {
         return Kgls;
+    }
+
+    double getRefl() const {
+        return Refl;
     }
 };
 

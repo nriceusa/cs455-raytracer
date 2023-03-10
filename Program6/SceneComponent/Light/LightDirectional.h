@@ -10,7 +10,7 @@
 
 class LightDirectional: public Light {
 public:
-    LightDirectional(const Vector3& Ip, const Vector3& location, const Vector3& rotation) : Light(Ip, location, rotation) {}
+    LightDirectional(const Vector3& Ip, const Vector3& origin, const Vector3& target) : Light(Ip, origin, target) {}
 };
 
 

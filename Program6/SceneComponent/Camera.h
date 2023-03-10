@@ -21,12 +21,6 @@ public:
     Camera(const double fovInDegrees, const Vector3 origin, const Vector3 target) :
            fov(degreesToRadians(fovInDegrees)), SceneComponent(origin, target) {}
 
-//    Camera(const double fovInDegrees,
-//           const double xOrigin, const double yOrigin, const double zOrigin,
-//           const double xLookAt, const double yLookAt, const double zLookAt) :
-//           fov(degreesToRadians(fovInDegrees)),
-//           SceneComponent(xOrigin, yOrigin, zOrigin, xLookAt, yLookAt, zLookAt) {}  // TODO : Remove this constructor
-
     const Vector3& getOrigin() const {
         return SceneComponent::getLocation();
     }
