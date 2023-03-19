@@ -15,7 +15,7 @@ private:
 
 protected:
     Geometry() :
-        material(0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5),
+        material(0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5),
         SceneComponent() {}
 
     Geometry(Material& material, const Vector3& location) :

@@ -57,6 +57,31 @@ public:
         }
     }
 
+    bool hitTriangle(const Triangle& triangle) const {
+        // Compute plane intersection
+        const double vd = Vector3::dot(triangle.getNormal(), destination);
+        if (vd >= 0) {  // Face is parallel or facing away from the triangle
+            return false;
+        }
+
+        const double d = Vector3::dot(triangle.getPoint1(), triangle.getNormal()); // TODO: make sure
+                                                                                                      // this is the coreect calculation of d
+        const double t = -(vd + d) / vd;
+        if (t <= 0) {  // Intersection is in the negative direction
+            return false;
+        }
+
+        const Vector3 intersect = origin + (destination * t);
+
+        const Vector3 C1 = intersect - triangle.getEdge1();
+        const Vector3 C2 = intersect - triangle.getEdge2();
+        const Vector3 C3 = intersect - triangle.getEdge3();
+
+        return ((Vector3::dot(triangle.getNormal(), Vector3::cross(triangle.getEdge1(), C1)) > 0) &&
+                (Vector3::dot(triangle.getNormal(), Vector3::cross(triangle.getEdge2(), C2)) > 0) &&
+                (Vector3::dot(triangle.getNormal(), Vector3::cross(triangle.getEdge3(), C3)) > 0));
+    }
+
     Vector3 computeSurfaceColor(const Vector3& intersect, const Vector3& normal, const Vector3& ambientColor,
                                 const Material& material, const Light& light) const {
         const Vector3 l = Vector3::normalize(light.getLocation() - intersect);

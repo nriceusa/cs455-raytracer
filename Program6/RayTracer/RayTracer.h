@@ -45,7 +45,7 @@ public:
                     if (t > 0) {
                         const Vector3 intersect = ray.at(t);
                         const Vector3 normal = (intersect - sphere.getCenter()) / sphere.getRadius();
-                        screen.setPixelColor(x, y, 0.5 * (normal.getX() + 1), 0.5 * (normal.getY() + 1), 0.5 * (normal.getZ() + 1));
+//                        screen.setPixelColor(x, y, 0.5 * (normal.getX() + 1), 0.5 * (normal.getY() + 1), 0.5 * (normal.getZ() + 1));
 
                         // Only accounts for one light
                         Vector3 surfaceColor = ray.computeSurfaceColor(intersect, normal, scene.getAmbientLight(),
@@ -57,7 +57,9 @@ public:
 
                 // Check for intersections with triangles
                 for (const Triangle& triangle : scene.getTriangles()) {
-                    // TODO: calculate triangle intersections
+                    if (ray.hitTriangle(triangle)) {
+                        screen.setPixelColor(x, y, 1, 0, 0);
+                    }
                 }
             }
         }
