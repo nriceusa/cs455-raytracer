@@ -67,7 +67,7 @@ public:
 
         const Vector3 intersect = origin + (rayScalar * direction);
 
-        if (rayScalar >= 0 && rayScalar <= 1) {
+        if (rayScalar <= 0) {
             return -1;
         }
 
@@ -116,13 +116,9 @@ public:
 
         // Compute reflections
         const Vector3 reflectionDirection = d - (2 * n * (Vector3::dot(d, n)));
-        const Ray reflectionRay(scene, intersect + (reflectionDirection * 0.001), reflectionDirection);
+        const Ray reflectionRay(scene, intersect + (n * 0.001), reflectionDirection);
 
-        double dl = d.getLength();
-        double nl = n.getLength();
-        double rl = reflectionDirection.getLength();
-
-        Vector3 reflectedColor(0, 0, 0);
+        Vector3 reflectedColor = scene.getAmbientLight();
         double lowestT = std::numeric_limits<double>::max();
         for (const Sphere& sphere : scene.getSpheres()) {
             const double t = reflectionRay.hitSphere(sphere);
@@ -136,16 +132,14 @@ public:
         }
         for (const Triangle& triangle : scene.getTriangles()) {
             const double t = reflectionRay.hitTriangle(triangle);
-//            if (t < lowestT && t > MIN_REFLECTION_DISTANCE) {
-            if (t < lowestT && t > -1) {
+            if (t < lowestT && t > MIN_REFLECTION_DISTANCE) {
                 lowestT = t;
                 const Vector3 reflectionIntersect = reflectionRay.at(t);
                 reflectedColor = reflectionRay.computeSurfaceColor(numRecursions - 1, reflectionIntersect, triangle.getNormal(),
                                                                    scene.getAmbientLight(), triangle.getTriangleMaterial());
             }
         }
-        const Vector3 ir = material.getKs() * reflectedColor;
-//        const Vector3 ir = reflectedColor;
+        const Vector3 ir = material.getRefl() * reflectedColor;
 
         // Compute diffuse
         double angleToLight = Vector3::dot(n, l);

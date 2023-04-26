@@ -50,7 +50,6 @@ public:
                         // Only accounts for one light
                         const Vector3 surfaceColor = ray.computeSurfaceColor(NUM_RECURSIONS, intersect, normal,
                                                                              scene.getAmbientLight(), sphere.getSphereMaterial());
-//                        const Vector3 surfaceColor = normal;
 
                         screen.setPixelColor(x, y, surfaceColor.getX(), surfaceColor.getY(), surfaceColor.getZ());
                     }
