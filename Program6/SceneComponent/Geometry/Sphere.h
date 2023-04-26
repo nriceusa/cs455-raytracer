@@ -22,6 +22,10 @@ public:
         return Geometry::getLocation();
     }
 
+    Vector3 getNormalAt(const Vector3& intersect) const {
+        return (intersect - Geometry::getLocation()) / radius;
+    }
+
     float getRadius() const {
         return radius;
     }

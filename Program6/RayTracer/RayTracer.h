@@ -5,6 +5,7 @@
 #ifndef PROGRAM5_RAYTRACER_H
 #define PROGRAM5_RAYTRACER_H
 
+#define NUM_RECURSIONS 4
 
 #include <cmath>
 #include <iostream>
@@ -44,11 +45,13 @@ public:
                     const double t = ray.hitSphere(sphere);
                     if (t > 0) {
                         const Vector3 intersect = ray.at(t);
-                        const Vector3 normal = (intersect - sphere.getCenter()) / sphere.getRadius();
+                        const Vector3 normal = sphere.getNormalAt(intersect);
 
                         // Only accounts for one light
-                        const Vector3 surfaceColor = ray.computeSurfaceColor(intersect, normal, scene.getAmbientLight(),
-                                                                       sphere.getSphereMaterial());
+                        const Vector3 surfaceColor = ray.computeSurfaceColor(NUM_RECURSIONS, intersect, normal,
+                                                                             scene.getAmbientLight(), sphere.getSphereMaterial());
+//                        const Vector3 surfaceColor = normal;
+
                         screen.setPixelColor(x, y, surfaceColor.getX(), surfaceColor.getY(), surfaceColor.getZ());
                     }
                 }
@@ -58,7 +61,7 @@ public:
                     const double t = ray.hitTriangle(triangle);
                     if (t > 0) {
                         const Vector3 intersect = ray.at(t);
-                        const Vector3 surfaceColor = ray.computeSurfaceColor(intersect, triangle.getNormal(),
+                        const Vector3 surfaceColor = ray.computeSurfaceColor(NUM_RECURSIONS, intersect, triangle.getNormal(),
                                                                              scene.getAmbientLight(),
                                                                              triangle.getTriangleMaterial());
 
