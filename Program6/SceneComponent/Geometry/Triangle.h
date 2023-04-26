@@ -21,11 +21,10 @@ private:
     const Vector3 normal;
 
 public:
-    Triangle(Material &material, const Vector3 &location,
-             const Vector3 &point1, const Vector3 &point2, const Vector3 &point3) :
-             Geometry(material, location), point1(point1), point2(point2), point3(point3),
+    Triangle(Material &material, const Vector3 &point1, const Vector3 &point2, const Vector3 &point3) :
+             Geometry(material, (point1 + point2 + point3) / 3), point1(point1), point2(point2), point3(point3),
              edge1(point2 - point1), edge2(point3 - point2), edge3(point1 - point3),
-             normal(Vector3::normalize(Vector3::cross(point2 - point1, point3 - point2))) {}
+             normal(Vector3::normalize(Vector3::cross(point2 - point1, point3 - point1))) {}
               // TODO: make sure you're crossing these right
 
     const Vector3 &getPoint1() const {
@@ -54,6 +53,10 @@ public:
 
     const Vector3 &getNormal() const {
         return normal;
+    }
+
+    const Material& getTriangleMaterial() const {
+        return Geometry::getMaterial();
     }
 };
 

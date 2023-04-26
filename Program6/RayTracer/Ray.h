@@ -5,8 +5,10 @@
 #ifndef PROGRAM5_RAY_H
 #define PROGRAM5_RAY_H
 
+#define MIN_REFLECTION_DISTANCE 0
 
 #include <ostream>
+#include <limits>
 #include "../Vector3.h"
 #include "../SceneComponent/Light/Light.h"
 
@@ -14,39 +16,38 @@ class Ray {
 private:
     const Scene& scene;
     const Vector3 origin;
-    const Vector3 destination;
+    const Vector3 direction;
 
 public:
-    explicit Ray(const Scene& scene) : scene(scene), origin(0, 0, 0), destination(0, 1, 0) {}
+    explicit Ray(const Scene& scene) : scene(scene), origin(0, 0, 0), direction(0, 1, 0) {}
 
     Ray(const Scene& scene, const Vector3& origin, const Vector3& direction) :
-        scene(scene), origin(origin), destination(direction) {}
+            scene(scene), origin(origin), direction(direction) {}
 
     Ray(const Scene& scene, const double xOrigin, const double yOrigin, const double zOrigin) :
-        scene(scene), origin(xOrigin, yOrigin, zOrigin), destination(0, 1, 0) {}
+            scene(scene), origin(xOrigin, yOrigin, zOrigin), direction(0, 1, 0) {}
 
     Ray(const Scene& scene, const double xOrigin, const double yOrigin, const double zOrigin,
         const double xDirection, const double yDirection, const double zDirection) :
-        scene(scene), origin(xOrigin, yOrigin, zOrigin), destination(xOrigin, yOrigin, zOrigin) {}
+            scene(scene), origin(xOrigin, yOrigin, zOrigin), direction(xOrigin, yOrigin, zOrigin) {}
 
     const Vector3& getOrigin() const {
         return origin;
     }
 
     const Vector3& getDestination() const {
-        return destination;
+        return direction;
     }
 
     Vector3 at(double position) const {
-        return origin + (position * destination);
+        return origin + (position * direction);
     }
 
     double hitSphere(const Sphere& sphere) const {
-//        Vector3 rayDirection = Vector3::normalize(destination);
         Vector3 oc = origin - sphere.getCenter();
 
-        double a = Vector3::dot(destination, destination);
-        double halfB = Vector3::dot(oc, destination);
+        double a = Vector3::dot(direction, direction);
+        double halfB = Vector3::dot(oc, direction);
         double c = oc.getLength() * oc.getLength() - (sphere.getRadius() * sphere.getRadius());
 
         double discriminant = halfB * halfB - a * c;
@@ -57,36 +58,86 @@ public:
         }
     }
 
-    bool hitTriangle(const Triangle& triangle) const {
-        // Compute plane intersection
-        const double vd = Vector3::dot(triangle.getNormal(), destination);
-        if (vd >= 0) {  // Face is parallel or facing away from the triangle
-            return false;
+    double hitTriangle(const Triangle& triangle) const {
+        // Compute plane intersect
+        const Vector3 originToPlane = triangle.getPoint1() - origin;
+
+        const double rayScalar = Vector3::dot(originToPlane, triangle.getNormal()) /
+                                 Vector3::dot(direction, triangle.getNormal());
+
+        const Vector3 intersect = origin + (rayScalar * direction);
+
+        if (rayScalar >= 0 && rayScalar <= 1) {
+            return -1;
         }
 
-        const double d = Vector3::dot(triangle.getPoint1(), triangle.getNormal()); // TODO: make sure
-                                                                                                      // this is the coreect calculation of d
-        const double t = -(vd + d) / vd;
-        if (t <= 0) {  // Intersection is in the negative direction
-            return false;
+        // Compute triangle intersect
+        const Vector3 point1ToIntersect = intersect - triangle.getPoint1();
+        const Vector3 point2ToIntersect = intersect - triangle.getPoint2();
+        const Vector3 point3ToIntersect = intersect - triangle.getPoint3();
+
+        if ((Vector3::dot(triangle.getNormal(), Vector3::cross(triangle.getEdge1(), point1ToIntersect)) > 0) &&
+            (Vector3::dot(triangle.getNormal(), Vector3::cross(triangle.getEdge2(), point2ToIntersect)) > 0) &&
+            (Vector3::dot(triangle.getNormal(), Vector3::cross(triangle.getEdge3(), point3ToIntersect)) > 0)) {
+            return rayScalar;
+        } else {
+            return -1;
         }
-
-        const Vector3 intersect = origin + (destination * t);
-
-        const Vector3 C1 = intersect - triangle.getEdge1();
-        const Vector3 C2 = intersect - triangle.getEdge2();
-        const Vector3 C3 = intersect - triangle.getEdge3();
-
-        return ((Vector3::dot(triangle.getNormal(), Vector3::cross(triangle.getEdge1(), C1)) > 0) &&
-                (Vector3::dot(triangle.getNormal(), Vector3::cross(triangle.getEdge2(), C2)) > 0) &&
-                (Vector3::dot(triangle.getNormal(), Vector3::cross(triangle.getEdge3(), C3)) > 0));
     }
 
     Vector3 computeSurfaceColor(const Vector3& intersect, const Vector3& normal, const Vector3& ambientColor,
-                                const Material& material, const Light& light) const {
+                                const Material& material) const {
+        const Light& light = scene.getLights().at(0);
         const Vector3 l = Vector3::normalize(light.getLocation() - intersect);
         const Vector3 n = Vector3::normalize(normal);
         const Vector3 v = Vector3::normalize(origin - intersect);
+        const Vector3 d = Vector3::normalize(direction);
+
+        // Compute shadows
+        bool inShadow = false;
+        const Vector3 shadowVector = Vector3::normalize(light.getLocation() - intersect);
+        const Ray shadowRay(scene, intersect + (shadowVector * 0.001), light.getLocation());
+        for (const Triangle& triangle : scene.getTriangles()) {
+            const double t = shadowRay.hitTriangle(triangle);
+            if (t > 0) {
+                inShadow = true;
+            }
+        }
+        for (const Sphere& sphere : scene.getSpheres()) {
+            const double t = shadowRay.hitSphere(sphere);
+            if (t > 0) {
+                inShadow = true;
+            }
+        }
+
+        // Compute reflections
+        const Vector3 reflectionDirection = d - 2 * n * (Vector3::dot(d, n));
+        const Ray reflectionRay(scene, intersect + (reflectionDirection * 0.001), reflectionDirection);
+
+        Vector3 reflectedColor(0, 0, 0);
+        double lowestT = std::numeric_limits<double>::max();
+        for (const Sphere& sphere : scene.getSpheres()) {
+            const double t = reflectionRay.hitSphere(sphere);
+            if (t < lowestT && t > MIN_REFLECTION_DISTANCE) {
+                lowestT = t;
+                const Vector3 reflectionIntersect = reflectionRay.at(t);
+                const Vector3 sphereNormal = (intersect - sphere.getCenter()) / sphere.getRadius();
+//                reflectedColor = reflectionRay.computeSurfaceColor(reflectionIntersect, sphereNormal,
+//                                                                   scene.getAmbientLight(), sphere.getSphereMaterial());
+                reflectedColor = Vector3(1, 0, 0);
+            }
+        }
+        for (const Triangle& triangle : scene.getTriangles()) {
+            const double t = reflectionRay.hitTriangle(triangle);
+            if (t < lowestT && t > MIN_REFLECTION_DISTANCE) {
+                lowestT = t;
+                const Vector3 reflectionIntersect = reflectionRay.at(t);
+//                reflectedColor = reflectionRay.computeSurfaceColor(reflectionIntersect, triangle.getNormal(),
+//                                                                   scene.getAmbientLight(), triangle.getTriangleMaterial());
+                reflectedColor = Vector3(1, 0, 0);
+            }
+        }
+        const Vector3 ir = material.getKs() * reflectedColor;
 
         // Compute diffuse
         double angleToLight = Vector3::dot(n, l);
@@ -107,7 +158,10 @@ public:
         const Vector3 is = material.getKs() * light.getIp() * material.getOs() * pow(angleToReflection, material.getKgls());
 
         // Sum lighting components
-        Vector3 surfaceColor = id + ia + is;
+        Vector3 surfaceColor = ia + ir;
+        if (!inShadow) {
+            surfaceColor += is + id;
+        }
         surfaceColor.setX(surfaceColor.getX() > 1 ? 1 : surfaceColor.getX());
         surfaceColor.setY(surfaceColor.getY() > 1 ? 1 : surfaceColor.getY());
         surfaceColor.setZ(surfaceColor.getZ() > 1 ? 1 : surfaceColor.getZ());
@@ -115,7 +169,7 @@ public:
     }
 
     friend std::ostream &operator<<(std::ostream &os, const Ray &ray) {
-        os << "origin: " << ray.origin << " destination: " << ray.destination;
+        os << "origin: " << ray.origin << " direction: " << ray.direction;
         return os;
     }
 };

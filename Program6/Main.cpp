@@ -24,7 +24,7 @@ int main() {
     const size_t image_width = 512;
     const size_t image_height = 512;
 
-    Camera camera(90, Vector3(0, 0, 1), Vector3(0, 0, 0));
+    Camera camera(60, Vector3(0, 0, 1), Vector3(0, 0, 0));
     Scene scene(51, 51, 51, camera, Vector3(0, 0, 0));
     Screen screen(image_width, image_height, scene.getSkyColorR(), scene.getSkyColorG(), scene.getSkyColorB());
     renderScene1(screen, scene);
@@ -47,13 +47,13 @@ void renderScene1(Screen& screen, Scene& scene) {
     scene.addSphere(sphere);
 
     Material blueTriangleMaterial(0.9, 1, 0.1, 0, 0, 1, 1, 1, 1, 4, 0);
-    Triangle blueTriangle(blueTriangleMaterial, Vector3(0, -0.7, -0.5), Vector3(0, 0, 0),
-                          Vector3(1, 0.4, -1), Vector3(0, -0.7, -1.5));
+    Triangle blueTriangle(blueTriangleMaterial, Vector3(0, -0.7, -0.5), Vector3(1, 0.4, -1),
+                          Vector3(0, -0.7, -1.5));
     scene.addTriangle(blueTriangle);
 
     Material yellowTriangleMaterial(0.9, 1, 0.1, 1, 1, 0, 1, 1, 1, 4, 0);
-    Triangle yellowTriangle(yellowTriangleMaterial, Vector3(0, 0, 0), Vector3(0, -0.7, -0.5),
-                            Vector3(0, -0.7, -1.5), Vector3(-1, 0.4, -1));
+    Triangle yellowTriangle(yellowTriangleMaterial, Vector3(0, -0.7, -0.5), Vector3(0, -0.7, -1.5),
+                            Vector3(-1, 0.4, -1));
     scene.addTriangle(yellowTriangle);
 
     RayTracer rayTracer(screen, scene);
