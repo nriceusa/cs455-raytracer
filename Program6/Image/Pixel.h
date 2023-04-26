@@ -21,7 +21,7 @@ public:
 
     Pixel(const unsigned char r, const unsigned char g, const unsigned char b) : R(r), G(g), B(b) {}
 
-    float getR() const {
+    unsigned char getR() const {
         return R;
     }
 
@@ -29,7 +29,7 @@ public:
         R = r;
     }
 
-    float getG() const {
+    unsigned char getG() const {
         return G;
     }
 
@@ -37,7 +37,7 @@ public:
         G = g;
     }
 
-    float getB() const {
+    unsigned char getB() const {
         return B;
     }
 

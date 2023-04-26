@@ -6,9 +6,11 @@
 #define PROGRAM5_RAYTRACER_H
 
 #define NUM_RECURSIONS 4
+#define MIN_CLIPPING_DISTANCE 0
 
 #include <cmath>
 #include <iostream>
+#include <limits>
 #include "../Image/Screen.h"
 #include "../Scene.h"
 #include "Ray.h"
@@ -39,18 +41,19 @@ public:
                 rayVector.setY(rayVector.getY() - rayWidth);
 
                 Ray ray(scene, scene.getCamera().getOrigin(), rayVector);
+                double lowestT = std::numeric_limits<double>::max();
 
                 // Check for intersections with spheres
                 for (const Sphere& sphere : scene.getSpheres()) {
                     const double t = ray.hitSphere(sphere);
-                    if (t > 0) {
+                    if (t < lowestT && t > MIN_CLIPPING_DISTANCE) {
+                        lowestT = t;
                         const Vector3 intersect = ray.at(t);
                         const Vector3 normal = sphere.getNormalAt(intersect);
 
                         // Only accounts for one light
-                        const Vector3 surfaceColor = ray.computeSurfaceColor(NUM_RECURSIONS, intersect, normal,
-                                                                             scene.getAmbientLight(), sphere.getSphereMaterial());
-
+                        Vector3 surfaceColor = ray.computeSurfaceColor(NUM_RECURSIONS, intersect, normal,
+                                                               scene.getAmbientLight(), sphere.getSphereMaterial());
                         screen.setPixelColor(x, y, surfaceColor.getX(), surfaceColor.getY(), surfaceColor.getZ());
                     }
                 }
@@ -58,15 +61,17 @@ public:
                 // Check for intersections with triangles
                 for (const Triangle& triangle : scene.getTriangles()) {
                     const double t = ray.hitTriangle(triangle);
-                    if (t > 0) {
+                    if (t < lowestT && t > MIN_CLIPPING_DISTANCE) {
+                        lowestT = t;
                         const Vector3 intersect = ray.at(t);
-                        const Vector3 surfaceColor = ray.computeSurfaceColor(NUM_RECURSIONS, intersect, triangle.getNormal(),
-                                                                             scene.getAmbientLight(),
-                                                                             triangle.getTriangleMaterial());
 
+                        // Only accounts for one light
+                        Vector3 surfaceColor = ray.computeSurfaceColor(NUM_RECURSIONS, intersect, triangle.getNormal(),
+                                                               scene.getAmbientLight(), triangle.getTriangleMaterial());
                         screen.setPixelColor(x, y, surfaceColor.getX(), surfaceColor.getY(), surfaceColor.getZ());
                     }
                 }
+
             }
         }
     }

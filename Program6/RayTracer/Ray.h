@@ -122,7 +122,7 @@ public:
         double lowestT = std::numeric_limits<double>::max();
         for (const Sphere& sphere : scene.getSpheres()) {
             const double t = reflectionRay.hitSphere(sphere);
-            if (t < lowestT && t > MIN_REFLECTION_DISTANCE) {
+            if (t < lowestT && t > MIN_CLIPPING_DISTANCE) {
                 lowestT = t;
                 const Vector3 reflectionIntersect = reflectionRay.at(t);
                 const Vector3 sphereNormal = (intersect - sphere.getCenter()) / sphere.getRadius();
@@ -132,7 +132,7 @@ public:
         }
         for (const Triangle& triangle : scene.getTriangles()) {
             const double t = reflectionRay.hitTriangle(triangle);
-            if (t < lowestT && t > MIN_REFLECTION_DISTANCE) {
+            if (t < lowestT && t > MIN_CLIPPING_DISTANCE) {
                 lowestT = t;
                 const Vector3 reflectionIntersect = reflectionRay.at(t);
                 reflectedColor = reflectionRay.computeSurfaceColor(numRecursions - 1, reflectionIntersect, triangle.getNormal(),
